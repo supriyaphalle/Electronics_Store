@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.controllers;
 
+import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.UserDto;
@@ -18,18 +19,16 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
-
-
     /**
+     * @param userDto
+     * @return http status for save data
      * @author SUPRIYA
      * @apiNote To save user data in  database
-     * @param userDto
      * @since V 1.0
-     * @return http status for save data
      */
     @PostMapping("/")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
@@ -41,49 +40,49 @@ public class UserController {
     }
 
     /**
+     * @param userId
+     * @return http status for update data
      * @author SUPRIYA
      * @apiNote To update user data in  database based on id
-     * @param userId
      * @since V 1.0
-     * @return http status for update data
      */
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable String userId, @Valid @RequestBody UserDto userDto) {
-        logger.info("Entering Request to update user Data for userId:{} ",userId);
+        logger.info("Entering Request to update user Data for userId:{} ", userId);
         UserDto userDto1 = userService.updateUSer(userDto, userId);
-        logger.info("Completed Request to update user Data for userId:{} ",userId);
+        logger.info("Completed Request to update user Data for userId:{} ", userId);
         return new ResponseEntity<>(userDto1, HttpStatus.OK);
     }
 
     /**
+     * @param userId
+     * @return http status for delete data
      * @author SUPRIYA
      * @apiNote To delete user data in  database based on id
-     * @param userId
      * @since V 1.0
-     * @return http status for delete data
      */
     @DeleteMapping("{userId}")
     public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable String userId) {
-        logger.info("Entering Request to delete user Data for userId:{} ",userId);
+        logger.info("Entering Request to delete user Data for userId:{} ", userId);
         userService.deleteUSer(userId);
-        ApiResponseMessage message = new ApiResponseMessage("User is deleted Successfully !!", true, HttpStatus.OK);
-        logger.info("Completed Request to delete user Data  for userId:{} ",userId);
+        ApiResponseMessage message = new ApiResponseMessage(AppConstants.DELETE_RESPONSE, true, HttpStatus.OK);
+        logger.info("Completed Request to delete user Data  for userId:{} ", userId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     /**
+     * @param
+     * @return list of all user data
      * @author SUPRIYA
      * @apiNote To get user data from  database
-     * @param
      * @since V 1.0
-     * @return list of all user data
      */
     @GetMapping("/")
     public ResponseEntity<PageableResponse<UserDto>> getAllUSer(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         logger.info("Entering Request to get user Data");
         PageableResponse userDtoList = userService.getAllUSer(pageNumber, pageSize, sortBy, sortDir);
@@ -92,46 +91,47 @@ public class UserController {
     }
 
     /**
+     * @param userId
+     * @return user data for userId
      * @author SUPRIYA
      * @apiNote To get user data from  database based on id
-     * @param userId
      * @since V 1.0
-     * @return user data for userId
      */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
-        logger.info("Entering Request to get  user Data with id:{} ",userId);
+        logger.info("Entering Request to get  user Data with id:{} ", userId);
         UserDto user = userService.getUSerById(userId);
-        logger.info("Completed Request to get user Data with id:{} ",userId);
+        logger.info("Completed Request to get user Data with id:{} ", userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**
+     * @param
+     * @return list of user data
      * @author SUPRIYA
      * @apiNote To get user data from  database with email
-     * @param
      * @since V 1.0
-     * @return list of user data
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        logger.info("Entering Request to get  user Data with email:{} ",email);
+        logger.info("Entering Request to get  user Data with email:{} ", email);
         UserDto userDto = userService.getUserByEmail(email);
-        logger.info("Completed Request to get user Data with email:{} ",email);
+        logger.info("Completed Request to get user Data with email:{} ", email);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
+
     /**
+     * @param
+     * @return list of user data
      * @author SUPRIYA
      * @apiNote To search user data from  database
-     * @param
      * @since V 1.0
-     * @return list of user data
      */
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchUserByKeyword(@PathVariable String keyword) {
-        logger.info("Entering Request to get  user Data with keyword:{} "+keyword);
+        logger.info("Entering Request to get  user Data with keyword:{} " + keyword);
         List<UserDto> userDtos = userService.searchUser(keyword);
-        logger.info("Completed Request to get user Data with keyword:{} "+keyword);
+        logger.info("Completed Request to get user Data with keyword:{} " + keyword);
         return new ResponseEntity<>(userDtos, HttpStatus.OK);
     }
 

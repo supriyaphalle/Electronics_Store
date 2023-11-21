@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.services.impl;
 
+import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.User;
@@ -49,8 +50,8 @@ public class UserserviceImpl implements UserService {
 
     @Override
     public UserDto updateUSer(UserDto userDto, String userId) {
-        logger.info("Initiating the dao call for the update user data for id :{} ",userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not fount with id"));
+        logger.info("Initiating the dao call for the update user data for id :{} ", userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         user.setName(userDto.getName());
         user.setGender(userDto.getGender());
         user.setPassword(userDto.getPassword());
@@ -59,16 +60,16 @@ public class UserserviceImpl implements UserService {
 
         User save = userRepository.save(user);
         UserDto updateDto = entityToDto(save);
-        logger.info("Completed the dao call for the update user data for id :{} " ,userId);
+        logger.info("Completed the dao call for the update user data for id :{} ", userId);
         return updateDto;
     }
 
     @Override
     public void deleteUSer(String userId) {
-        logger.info("Initiating the dao call for the delete user data for id :{} ",userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id!!"));
+        logger.info("Initiating the dao call for the delete user data for id :{} ", userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         userRepository.delete(user);
-        logger.info("Completed the dao call for the delete user data for id :{} " ,userId);
+        logger.info("Completed the dao call for the delete user data for id :{} ", userId);
     }
 
     @Override
@@ -85,22 +86,22 @@ public class UserserviceImpl implements UserService {
     @Override
     public UserDto getUSerById(String userId) {
         logger.info("Initiating the dao call for the get user data for id :{} ", userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with userId!!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND + "with userID"));
         logger.info("Completed the dao call for the get user data for id :{] ", userId);
         return entityToDto(user);
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        logger.info("Initiating the dao call for the get user data for email : {}",email);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found with email!!"));
-        logger.info("Completed the dao call for the get user data for email :{} " , email);
+        logger.info("Initiating the dao call for the get user data for email : {}", email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND_WITH_EMAIL));
+        logger.info("Completed the dao call for the get user data for email :{} ", email);
         return entityToDto(user);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword) {
-        logger.info("Initiating the dao call for the search user data for keyword :{}",keyword);
+        logger.info("Initiating the dao call for the search user data for keyword :{}", keyword);
         List<User> userList = userRepository.findByNameContaining(keyword);
         List<UserDto> userDtoList = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
         logger.info("Completed the dao call for the search user data for keyword :{} ", keyword);
