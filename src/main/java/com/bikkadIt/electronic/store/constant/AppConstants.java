@@ -7,6 +7,8 @@ public class AppConstants {
 
     public final static String DELETE_RESPONSE = "User is deleted Successfully !!";
 
+    public final static String  UPLOAD_RESPONSE=  "Image uploaded successfully !";
+
     public static final String PAGE_NUMBER = "0";
 
     public static final String PAGE_SIZE = "10";
