@@ -12,12 +12,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -31,8 +36,9 @@ public class UserController {
     @Autowired
     private FileService fileService;
 
-    @Value("$(user.profile.image.path)")
+    @Value("${user.profile.image.path}")
     private String imageUploadPath;
+
 
 
     /**
@@ -166,9 +172,20 @@ public class UserController {
 
         UserDto dto = userService.updateUSer(user, userId);
 
-        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).status(HttpStatus.CREATED).build();
+        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
 
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/image/{userId}")
+    public void serverUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+
+        UserDto user = userService.getUSerById(userId);
+        logger.info("Get image file name:{}",user.getImageName());
+        InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
 
     }
 
