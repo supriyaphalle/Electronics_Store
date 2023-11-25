@@ -55,17 +55,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        logger.info("Initiating the dao call for the get category data");
+        logger.info("Initiating the dao call for the all get category data");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Category> all = categoryRepository.findAll(pageable);
         PageableResponse<CategoryDto> response = Helper.getPageableResponse(all, CategoryDto.class);
-        logger.info("Initiating the dao call for the get category data");
+        logger.info("Completed the dao call for the all get category data");
         return response;
     }
 
     @Override
     public CategoryDto get(String categoryId) {
-        return null;
+        logger.info("Initiating the dao call for the get category data");
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        logger.info("Completed the dao call for the  get category data");
+        return modelMapper.map(category, CategoryDto.class);
     }
 }
