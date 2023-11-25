@@ -4,12 +4,17 @@ import com.bikkadIt.electronic.store.dtos.CategoryDto;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.exceptions.ResourceNotFoundException;
+import com.bikkadIt.electronic.store.helper.Helper;
 import com.bikkadIt.electronic.store.repositories.CategoryRepository;
 import com.bikkadIt.electronic.store.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class CategoryServiceImpl implements CategoryService {
 
@@ -49,8 +54,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public PageableResponse<CategoryDto> getAll() {
-        return null;
+    public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        logger.info("Initiating the dao call for the get category data");
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Category> all = categoryRepository.findAll(pageable);
+        PageableResponse<CategoryDto> response = Helper.getPageableResponse(all, CategoryDto.class);
+        logger.info("Initiating the dao call for the get category data");
+        return response;
     }
 
     @Override
