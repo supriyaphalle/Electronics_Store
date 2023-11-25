@@ -35,22 +35,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(CategoryDto categoryDto, String categoryId) {
-        logger.info("Initiating the dao call for the update category data");
+        logger.info("Initiating the dao call for the update category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
         category.setDescription(categoryDto.getDescription());
         category.setTitle(categoryDto.getTitle());
         category.setCoverImage(categoryDto.getCoverImage());
         Category save = categoryRepository.save(category);
-        logger.info("Completed the dao call for the update category data");
+        logger.info("Completed the dao call for the update category data for id:{}", categoryId);
         return modelMapper.map(save, CategoryDto.class);
     }
 
     @Override
     public void delete(String categoryId) {
-        logger.info("Initiating the dao call for the delete category data");
+        logger.info("Initiating the dao call for the delete category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
         categoryRepository.delete(category);
-        logger.info("Completed the dao call for the delete category data");
+        logger.info("Completed the dao call for the delete category data for id:{}", categoryId);
     }
 
     @Override
@@ -66,9 +66,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto get(String categoryId) {
-        logger.info("Initiating the dao call for the get category data");
+        logger.info("Initiating the dao call for the get category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-        logger.info("Completed the dao call for the  get category data");
+        logger.info("Completed the dao call for the  get category data for id:{}", categoryId);
         return modelMapper.map(category, CategoryDto.class);
     }
 }
