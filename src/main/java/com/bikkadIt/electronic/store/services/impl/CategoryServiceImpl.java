@@ -3,6 +3,7 @@ package com.bikkadIt.electronic.store.services.impl;
 import com.bikkadIt.electronic.store.dtos.CategoryDto;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.entities.Category;
+import com.bikkadIt.electronic.store.exceptions.ResourceNotFoundException;
 import com.bikkadIt.electronic.store.repositories.CategoryRepository;
 import com.bikkadIt.electronic.store.services.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -29,7 +30,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(CategoryDto categoryDto, String categoryId) {
-        return null;
+        logger.info("Initiating the dao call for the update category data");
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
+        category.setDescription(categoryDto.getDescription());
+        category.setTitle(categoryDto.getTitle());
+        category.setCoverImage(categoryDto.getCoverImage());
+        Category save = categoryRepository.save(category);
+        logger.info("Completed the dao call for the update category data");
+        return modelMapper.map(save, CategoryDto.class);
     }
 
     @Override
