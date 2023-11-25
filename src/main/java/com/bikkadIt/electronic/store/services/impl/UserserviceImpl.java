@@ -76,14 +76,14 @@ public class UserserviceImpl implements UserService {
     public void deleteUSer(String userId) {
         logger.info("Initiating the dao call for the delete user data for id :{} ", userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
-        String fullPath = imagePath+user.getImageName();
+        String fullPath = imagePath + user.getImageName();
         try {
             Path path = Paths.get(fullPath);
             Files.delete(path);
-        }catch (NoSuchFileException e){
+        } catch (NoSuchFileException e) {
             logger.info("User image not found in folder");
             e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         userRepository.delete(user);

@@ -40,7 +40,6 @@ public class UserController {
     private String imageUploadPath;
 
 
-
     /**
      * @param userDto
      * @return http status for save data
@@ -164,6 +163,7 @@ public class UserController {
     @PostMapping("/image/{userId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userImage") MultipartFile image, @PathVariable String userId
     ) throws IOException {
+        logger.info("Entering Request to get  upload image with userId:{} ", userId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
 
         UserDto user = userService.getUSerById(userId);
@@ -173,19 +173,28 @@ public class UserController {
         UserDto dto = userService.updateUSer(user, userId);
 
         ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
-
+        logger.info("Completed Request to get  upload image with userId:{} ", userId);
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
 
     }
 
+
+    /**
+     * @param
+     * @return image file
+     * @author SUPRIYA
+     * @apiNote To get image file
+     * @since V 1.0
+     */
     @GetMapping("/image/{userId}")
     public void serverUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
-
+        logger.info("Entering Request to get  image file with userId:{} ", userId);
         UserDto user = userService.getUSerById(userId);
-        logger.info("Get image file name:{}",user.getImageName());
+        logger.info("Get image file name:{}", user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        StreamUtils.copy(resource,response.getOutputStream());
+        logger.info("Completed  Request to get   image file with userId:{} ", userId);
+        StreamUtils.copy(resource, response.getOutputStream());
 
     }
 
