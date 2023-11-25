@@ -42,7 +42,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(String categoryId) {
-
+        logger.info("Initiating the dao call for the delete category data");
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
+        categoryRepository.delete(category);
+        logger.info("Completed the dao call for the delete category data");
     }
 
     @Override
