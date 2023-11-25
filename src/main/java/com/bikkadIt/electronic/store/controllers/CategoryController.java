@@ -56,7 +56,15 @@ public class CategoryController {
         logger.info("Entering request to delete category data ");
         PageableResponse<CategoryDto> allList = categoryService.getAll(pageNumber, pageSize, sortBy, sortDir);
         logger.info("Completed request to delete category data ");
-        return new ResponseEntity<PageableResponse>(allList,HttpStatus.OK);
+        return new ResponseEntity<PageableResponse>(allList, HttpStatus.OK);
+    }
+
+    @GetMapping("/categoryId")
+    public ResponseEntity<CategoryDto> getCategoryDataById(@PathVariable String categoryId) {
+        logger.info("Entering request to get category data for id:{}", categoryId);
+        CategoryDto categoryDto = categoryService.get(categoryId);
+        logger.info("Completed request to get category data for id:{}", categoryId);
+        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
     }
 
 
