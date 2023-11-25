@@ -1,10 +1,7 @@
 package com.bikkadIt.electronic.store.entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +12,7 @@ import javax.persistence.Table;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -29,7 +27,7 @@ public class Category {
     @Column(name = "category_desc")
     private String description;
 
-    @Column(name = "category_title")
+    @Column(name = "cover_Image")
     private String coverImage;
 
 }
