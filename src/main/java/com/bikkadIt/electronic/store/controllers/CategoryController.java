@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/category")
@@ -21,11 +19,20 @@ public class CategoryController {
     Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createData(CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createData(@RequestBody CategoryDto categoryDto) {
         logger.info("Entering Request to create category Data");
         CategoryDto category = categoryService.create(categoryDto);
         logger.info("Completed Request to create category data");
         return new ResponseEntity(category, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<CategoryDto> updateData(@RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
+        logger.info("Entering Request to update category Data for id:{}", categoryId);
+        CategoryDto update = categoryService.update(categoryDto, categoryId);
+        logger.info("Entering Request to update category Data for id:{}", categoryId);
+        return  new ResponseEntity<CategoryDto>(update,HttpStatus.OK);
+    }
+
 
 }
