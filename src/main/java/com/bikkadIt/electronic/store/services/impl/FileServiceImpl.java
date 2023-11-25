@@ -27,6 +27,7 @@ public class FileServiceImpl implements FileService {
         String fileNameWithExtension = fileName + extension;
         String fullPathWithFileName = path + fileNameWithExtension;
 
+        logger.info("Filename: {}", fullPathWithFileName);
         if (extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".jpeg")) {
             File folder = new File(path);
 
@@ -44,7 +45,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException {
-        String fullPath = path + File.pathSeparator + name;
+        String fullPath = path  + name ;
         InputStream inputStream = new FileInputStream(fullPath);
         return inputStream;
     }
