@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -102,7 +101,7 @@ public class UserController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         logger.info("Entering Request to get user Data");
-        PageableResponse userDtoList = userService.getAllUSer(pageNumber, pageSize, sortBy, sortDir);
+        PageableResponse<UserDto> userDtoList = userService.getAllUSer(pageNumber, pageSize, sortBy, sortDir);
         logger.info("Completed Request to get user Data");
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }

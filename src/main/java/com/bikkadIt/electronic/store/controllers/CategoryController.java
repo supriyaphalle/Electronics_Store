@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -29,7 +31,7 @@ public class CategoryController {
      * @since V 1.0
      */
     @PostMapping
-    public ResponseEntity<CategoryDto> createData(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createData(@Valid @RequestBody CategoryDto categoryDto) {
         logger.info("Entering Request to create category Data");
         CategoryDto category = categoryService.create(categoryDto);
         logger.info("Completed Request to create category data");
@@ -44,7 +46,7 @@ public class CategoryController {
      * @since V 1.0
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDto> updateData(@RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
+    public ResponseEntity<CategoryDto> updateData(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
         logger.info("Entering Request to update category Data for id:{}", categoryId);
         CategoryDto update = categoryService.update(categoryDto, categoryId);
         logger.info("Entering Request to update category Data for id:{}", categoryId);
@@ -61,7 +63,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponseMessage> deleteData(@PathVariable String categoryId) {
         logger.info("Entering request to delete category data for id:{}", categoryId);
         categoryService.delete(categoryId);
-        ApiResponseMessage message = new ApiResponseMessage(AppConstants.DELETE_RESPONSE, true, HttpStatus.OK);
+        ApiResponseMessage message = new ApiResponseMessage(AppConstants.DELETE_CATEGORY_RESPONSE, true, HttpStatus.OK);
         logger.info("Completed request to delete category data for id:{}", categoryId);
         return new ResponseEntity<ApiResponseMessage>(message, HttpStatus.OK);
     }
@@ -93,7 +95,7 @@ public class CategoryController {
      * @apiNote To get category data from database
      * @since V 1.0
      */
-    @GetMapping("/categoryId")
+    @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryDataById(@PathVariable String categoryId) {
         logger.info("Entering request to get category data for id:{}", categoryId);
         CategoryDto categoryDto = categoryService.get(categoryId);

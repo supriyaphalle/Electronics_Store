@@ -18,7 +18,6 @@ import javax.persistence.Table;
 public class Category {
 
     @Id
-    @Column(name = "Id")
     private String categoryId;
 
     @Column(name = "category_title")

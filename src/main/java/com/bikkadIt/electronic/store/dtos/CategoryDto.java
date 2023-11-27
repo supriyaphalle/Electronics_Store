@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
@@ -15,13 +16,14 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class CategoryDto {
 
+    private String categoryId;
+
     @NotBlank
-    @Min(value=4, message = "title must be of minimum 4 charters")
-    @Max(value = 60)
+    @Size(min = 4, message = "title must be of minimum 4 charters")
     private String title;
 
     @NotBlank(message = "Description required!!")
-    @Max(value = 100)
+    @Size(min = 4, message = "Description must be of minimum 4 charters")
     private String description;
 
     @NotBlank(message = "coverImage required!!")

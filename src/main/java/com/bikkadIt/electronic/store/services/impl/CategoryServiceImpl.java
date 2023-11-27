@@ -15,7 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
@@ -27,6 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         logger.info("Initiating the dao call for the save category data");
+        String categoryId = UUID.randomUUID().toString();
+        categoryDto.setCategoryId(categoryId);
         Category category = modelMapper.map(categoryDto, Category.class);
         Category save = categoryRepository.save(category);
         logger.info("Completed the dao call for the save category data");
