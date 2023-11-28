@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class UserserviceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -37,7 +37,7 @@ public class UserserviceImpl implements UserService {
     @Autowired
     ModelMapper mapper;
 
-    Logger logger = LoggerFactory.getLogger(UserserviceImpl.class);
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Value("${user.profile.image.path}")
     private String imagePath;

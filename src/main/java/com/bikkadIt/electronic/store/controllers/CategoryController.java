@@ -12,12 +12,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/category")
@@ -126,4 +132,16 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/image/{categoryId}")
+    public void getImageFromServer(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
+        logger.info("Entering request to get image file with categoryID:{}", categoryId);
+        CategoryDto categoryDto = categoryService.get(categoryId);
+        InputStream resource = fileService.getResource(imagePath, categoryDto.getCoverImage());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        logger.info("Completed request to get image file with categoryID:{}", categoryId);
+        StreamUtils.copy(resource, response.getOutputStream());
+    }
+
+
 }
+
