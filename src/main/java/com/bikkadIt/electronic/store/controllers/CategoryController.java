@@ -3,16 +3,21 @@ package com.bikkadIt.electronic.store.controllers;
 import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
 import com.bikkadIt.electronic.store.dtos.CategoryDto;
+import com.bikkadIt.electronic.store.dtos.ImageResponse;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.services.CategoryService;
+import com.bikkadIt.electronic.store.services.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/category")
@@ -21,7 +26,11 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    FileService fileService;
     Logger logger = LoggerFactory.getLogger(CategoryController.class);
+    @Value("${category.profile.image.path}")
+    private String imagePath;
 
     /**
      * @param categoryDto
@@ -101,6 +110,19 @@ public class CategoryController {
         CategoryDto categoryDto = categoryService.get(categoryId);
         logger.info("Completed request to get category data for id:{}", categoryId);
         return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/image/{categoryId}")
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userImage") MultipartFile image, @PathVariable String categoryId) throws IOException {
+        logger.info("Entering request to upload image with categoryId:{}", categoryId);
+        String uploadImageFile = fileService.uploadFile(image, imagePath);
+        CategoryDto dto = categoryService.get(categoryId);
+        dto.setCoverImage(uploadImageFile);
+        CategoryDto update = categoryService.update(dto, categoryId);
+        ImageResponse response = ImageResponse.builder().imageName(uploadImageFile).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
+        logger.info("Completed request to upload image with categoryId:{}", categoryId);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
