@@ -5,14 +5,14 @@ import com.bikkadIt.electronic.store.dtos.PageableResponse;
 
 public interface CategoryService {
 
-    CategoryDto create(CategoryDto categoryDto);
+    CategoryDto createCategory(CategoryDto categoryDto);
 
-    CategoryDto update(CategoryDto categoryDto, String categoryId);
+    CategoryDto updateCategory(CategoryDto categoryDto, String categoryId);
 
-    void delete(String categoryId);
+    void deleteCategory(String categoryId);
 
-    public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize,String sortBy, String sortDir ) ;
+    public PageableResponse<CategoryDto> getAllCategory(int pageNumber, int pageSize, String sortBy, String sortDir);
 
-    CategoryDto get(String categoryId);
+    CategoryDto getCategory(String categoryId);
 
 }

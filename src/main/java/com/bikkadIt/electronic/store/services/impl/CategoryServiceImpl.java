@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public CategoryDto create(CategoryDto categoryDto) {
+    public CategoryDto createCategory(CategoryDto categoryDto) {
         logger.info("Initiating the dao call for the save category data");
         String categoryId = UUID.randomUUID().toString();
         categoryDto.setCategoryId(categoryId);
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto update(CategoryDto categoryDto, String categoryId) {
+    public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
         logger.info("Initiating the dao call for the update category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
         category.setDescription(categoryDto.getDescription());
@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(String categoryId) {
+    public void deleteCategory(String categoryId) {
         logger.info("Initiating the dao call for the delete category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
         categoryRepository.delete(category);
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+    public PageableResponse<CategoryDto> getAllCategory(int pageNumber, int pageSize, String sortBy, String sortDir) {
         logger.info("Initiating the dao call for the all get category data");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto get(String categoryId) {
+    public CategoryDto getCategory(String categoryId) {
         logger.info("Initiating the dao call for the get category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         logger.info("Completed the dao call for the  get category data for id:{}", categoryId);

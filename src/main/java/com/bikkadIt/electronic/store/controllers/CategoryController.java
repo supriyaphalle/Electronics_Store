@@ -18,10 +18,8 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -48,7 +46,7 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<CategoryDto> createData(@Valid @RequestBody CategoryDto categoryDto) {
         logger.info("Entering Request to create category Data");
-        CategoryDto category = categoryService.create(categoryDto);
+        CategoryDto category = categoryService.createCategory(categoryDto);
         logger.info("Completed Request to create category data");
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
@@ -63,7 +61,7 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> updateData(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
         logger.info("Entering Request to update category Data for id:{}", categoryId);
-        CategoryDto update = categoryService.update(categoryDto, categoryId);
+        CategoryDto update = categoryService.updateCategory(categoryDto, categoryId);
         logger.info("Entering Request to update category Data for id:{}", categoryId);
         return new ResponseEntity<CategoryDto>(update, HttpStatus.OK);
     }
@@ -77,7 +75,7 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponseMessage> deleteData(@PathVariable String categoryId) {
         logger.info("Entering request to delete category data for id:{}", categoryId);
-        categoryService.delete(categoryId);
+        categoryService.deleteCategory(categoryId);
         ApiResponseMessage message = new ApiResponseMessage(AppConstants.DELETE_CATEGORY_RESPONSE, true, HttpStatus.OK);
         logger.info("Completed request to delete category data for id:{}", categoryId);
         return new ResponseEntity<ApiResponseMessage>(message, HttpStatus.OK);
@@ -98,7 +96,7 @@ public class CategoryController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         logger.info("Entering request to delete category data ");
-        PageableResponse<CategoryDto> allList = categoryService.getAll(pageNumber, pageSize, sortBy, sortDir);
+        PageableResponse<CategoryDto> allList = categoryService.getAllCategory(pageNumber, pageSize, sortBy, sortDir);
         logger.info("Completed request to delete category data ");
         return new ResponseEntity<>(allList, HttpStatus.OK);
     }
@@ -113,7 +111,7 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryDataById(@PathVariable String categoryId) {
         logger.info("Entering request to get category data for id:{}", categoryId);
-        CategoryDto categoryDto = categoryService.get(categoryId);
+        CategoryDto categoryDto = categoryService.getCategory(categoryId);
         logger.info("Completed request to get category data for id:{}", categoryId);
         return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
     }
@@ -129,9 +127,9 @@ public class CategoryController {
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userImage") MultipartFile image, @PathVariable String categoryId) throws IOException {
         logger.info("Entering request to upload image with categoryId:{}", categoryId);
         String uploadImageFile = fileService.uploadFile(image, imagePath);
-        CategoryDto dto = categoryService.get(categoryId);
+        CategoryDto dto = categoryService.getCategory(categoryId);
         dto.setCoverImage(uploadImageFile);
-        CategoryDto update = categoryService.update(dto, categoryId);
+        CategoryDto update = categoryService.updateCategory(dto, categoryId);
         ImageResponse response = ImageResponse.builder().imageName(uploadImageFile).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
         logger.info("Completed request to upload image with categoryId:{}", categoryId);
 
@@ -148,7 +146,7 @@ public class CategoryController {
     @GetMapping("/image/{categoryId}")
     public void getImageFromServer(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
         logger.info("Entering request to get image file with categoryID:{}", categoryId);
-        CategoryDto categoryDto = categoryService.get(categoryId);
+        CategoryDto categoryDto = categoryService.getCategory(categoryId);
         InputStream resource = fileService.getResource(imagePath, categoryDto.getCoverImage());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         logger.info("Completed request to get image file with categoryID:{}", categoryId);
