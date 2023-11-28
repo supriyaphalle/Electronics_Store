@@ -118,6 +118,13 @@ public class CategoryController {
         return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
     }
 
+    /**
+     * @return Image response for upload image
+     * @Param categoryID, image file
+     * @author SUPRIYA
+     * @apiNote To upload image file to database
+     * @since V 1.0
+     */
     @PostMapping("/image/{categoryId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userImage") MultipartFile image, @PathVariable String categoryId) throws IOException {
         logger.info("Entering request to upload image with categoryId:{}", categoryId);
@@ -131,7 +138,13 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    /**
+     * @return image from database
+     * @Param categoryID
+     * @author SUPRIYA
+     * @apiNote To get image file from database
+     * @since V 1.0
+     */
     @GetMapping("/image/{categoryId}")
     public void getImageFromServer(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
         logger.info("Entering request to get image file with categoryID:{}", categoryId);
