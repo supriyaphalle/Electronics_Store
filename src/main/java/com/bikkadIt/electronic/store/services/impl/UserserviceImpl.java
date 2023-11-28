@@ -48,10 +48,10 @@ public class UserserviceImpl implements UserService {
         String userId = UUID.randomUUID().toString();
         userDto.setUserId(userId);
 
-        User user = dtoToEntity(userDto);
+        User user = mapper.map(userDto, User.class);
         User user1 = userRepository.save(user);
 
-        UserDto userDto1 = entityToDto(user1);
+        UserDto userDto1 =  mapper.map(user, UserDto.class);
         logger.info("Complete the dao call for the save user data");
         return userDto1;
     }
@@ -67,7 +67,7 @@ public class UserserviceImpl implements UserService {
         user.setImageName(userDto.getImageName());
 
         User save = userRepository.save(user);
-        UserDto updateDto = entityToDto(save);
+        UserDto updateDto =  mapper.map(user, UserDto.class);
         logger.info("Completed the dao call for the update user data for id :{} ", userId);
         return updateDto;
     }
@@ -105,8 +105,8 @@ public class UserserviceImpl implements UserService {
     public UserDto getUSerById(String userId) {
         logger.info("Initiating the dao call for the get user data for id :{} ", userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND + "with userID"));
-        logger.info("Completed the dao call for the get user data for id :{] ", userId);
-        return entityToDto(user);
+        logger.info("Completed the dao call for the get user data for id :{} ", userId);
+        return  mapper.map(user, UserDto.class);
     }
 
     @Override
@@ -114,22 +114,19 @@ public class UserserviceImpl implements UserService {
         logger.info("Initiating the dao call for the get user data for email : {}", email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND_WITH_EMAIL));
         logger.info("Completed the dao call for the get user data for email :{} ", email);
-        return entityToDto(user);
+        return  mapper.map(user, UserDto.class);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword) {
         logger.info("Initiating the dao call for the search user data for keyword :{}", keyword);
         List<User> userList = userRepository.findByNameContaining(keyword);
-        List<UserDto> userDtoList = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtoList = userList.stream().map(user ->  mapper.map(user, UserDto.class)).collect(Collectors.toList());
         logger.info("Completed the dao call for the search user data for keyword :{} ", keyword);
         return userDtoList;
     }
 
-    private UserDto entityToDto(User user) {
 
-        return mapper.map(user, UserDto.class);
-    }
 
     private User dtoToEntity(UserDto userDto) {
         return mapper.map(userDto, User.class);
