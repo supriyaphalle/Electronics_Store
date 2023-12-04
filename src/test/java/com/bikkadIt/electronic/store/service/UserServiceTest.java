@@ -92,7 +92,42 @@ public class UserServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).delete(user);
 
     }
+    @Test
+    public void getAllUserTest(){
 
+        User user1 = User.builder()
+                .name("Rajvi")
+                .email("rajvi@gmail.com")
+                .about("this is getall method")
+                .gender("Female")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+
+        User user2 = User.builder()
+                .name("Reva")
+                .email("reva@gmail.com")
+                .about("this is Create method")
+                .gender("Female")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+        List<User> userList= Arrays.asList(user,user1,user2);
+
+        Page<User> page= new PageImpl<>(userList);
+
+        Mockito.when(userRepository.findAll((Pageable)Mockito.any())).thenReturn(page);
+
+        Sort sort= Sort.by("name").ascending();
+
+        Pageable pageable = PageRequest.of(1,2,sort);
+
+        PageableResponse<UserDto> allUser= userService.getAllUSer(1,2,"name","asc");
+        Assertions.assertEquals(3,allUser.getContent().size());
+
+    }
 
 
 }
