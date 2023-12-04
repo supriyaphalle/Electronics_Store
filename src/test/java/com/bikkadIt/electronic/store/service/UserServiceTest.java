@@ -104,7 +104,6 @@ public class UserServiceTest {
                 .password("abcd")
                 .build();
 
-
         User user2 = User.builder()
                 .name("Reva")
                 .email("reva@gmail.com")
@@ -129,5 +128,15 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void getUserByIdTest(){
+        String userId="abcdesx";
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        UserDto userDto= userService.getUSerById(userId);
+
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getName(),userDto.getName(),"Name not matched");
+    }
 
 }
