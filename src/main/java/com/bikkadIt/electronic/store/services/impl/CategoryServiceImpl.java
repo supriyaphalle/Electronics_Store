@@ -11,12 +11,18 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -27,6 +33,9 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Value("${category.profile.image.path}")
+    private String imagePath;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
@@ -55,9 +64,19 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(String categoryId) {
         logger.info("Initiating the dao call for the delete category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
+        String fullPath= imagePath+ category.getCoverImage();
+        try{
+            Path path = Paths.get(fullPath);
+            Files.delete(path);
+        } catch (NoSuchFileException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         categoryRepository.delete(category);
         logger.info("Completed the dao call for the delete category data for id:{}", categoryId);
     }
+
 
     @Override
     public PageableResponse<CategoryDto> getAllCategory(int pageNumber, int pageSize, String sortBy, String sortDir) {
