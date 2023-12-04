@@ -47,6 +47,26 @@ public class CategoryServiceTest {
         Assertions.assertEquals("Electronics Product", dto.getTitle(), "Title not matched");
 
     }
+    @Test
+    public void updateCategoryTest() {
+
+        String categoryId = "abcdxyz";
+        CategoryDto dto = CategoryDto.builder()
+                .title("Products")
+                .description("This is catogory of Electronics products")
+                .coverImage("abc.png")
+                .build();
+        Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
+        Mockito.when(repository.save(Mockito.any())).thenReturn(category);
+        CategoryDto dto1 = categoryService.updateCategory(dto, categoryId);
+
+        Assertions.assertNotNull(dto1);
+        Assertions.assertEquals(dto.getTitle(), dto1.getTitle(), "Title not match");
+    }
+
+
+
+
 
 
 }
