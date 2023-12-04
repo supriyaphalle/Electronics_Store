@@ -151,6 +151,39 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void searchUserTest(){
+        User user1 = User.builder()
+                .name("Revati Patil")
+                .email("reva@gmail.com")
+                .about("this is Create method")
+                .gender("Female")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+        User user2 = User.builder()
+                .name("Reva Patil")
+                .email("reva@gmail.com")
+                .about("this is Create method")
+                .gender("Female")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+        String keyword = "Patil";
+
+        List<User> list = Arrays.asList(user, user1, user2);
+
+        Mockito.when(userRepository.findByNameContaining(keyword)).thenReturn(list);
+
+        List<UserDto> dtos = userService.searchUser(keyword);
+
+        Assertions.assertEquals(4,dtos.size(),"Size not matched");
+
+    }
+
+
 
 
 
