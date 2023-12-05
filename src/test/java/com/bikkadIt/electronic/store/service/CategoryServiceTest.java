@@ -92,4 +92,31 @@ public class CategoryServiceTest {
 
     }
 
+    @Test
+    public void getAllCategoryTest() {
+        Category category1 = Category.builder()
+                .title("Electronics Product")
+                .description("This is electronics Category")
+                .coverImage("abc.png")
+                .build();
+        Category category2 = Category.builder()
+                .title("Electronics Product")
+                .description("This is electronics Category")
+                .coverImage("abc.png")
+                .build();
+
+        List<Category> list = Arrays.asList(category, category1, category2);
+
+        Page page = new PageImpl<>(list);
+        Mockito.when(repository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        Sort sort = Sort.by("title").ascending();
+        PageRequest request = PageRequest.of(1, 2, sort);
+
+        PageableResponse<CategoryDto> allCategory = categoryService.getAllCategory(1, 2, "title", "asc");
+
+        Assertions.assertEquals(3,allCategory.getContent().size());
+
+    }
+
 }
