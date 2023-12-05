@@ -95,7 +95,33 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    public void getAllUsersTest() throws Exception {
 
+        UserDto userDto1 = UserDto.builder().name("Priya").about("This is update data").gender("Female").imageName("abc.jpg").build();
+        UserDto userDto2 = UserDto.builder().name("Rajvi").about("This is update data").gender("Female").imageName("abc.jpg").build();
+        UserDto userDto3 = UserDto.builder().name("Anisha").about("This is update data").gender("Female").imageName("abc.jpg").build();
+        UserDto userDto4 = UserDto.builder().name("Sia").about("This is update data").gender("Female").imageName("abc.jpg").build();
+
+
+        PageableResponse<UserDto> pageableResponse = new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(userDto1, userDto2, userDto3, userDto4));
+
+        pageableResponse.setLastPage(false);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setPageNumber(20);
+        pageableResponse.setTotalElements(100);
+
+        Mockito.when(userService.getAllUSer(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString())).thenReturn(pageableResponse);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 
 }
