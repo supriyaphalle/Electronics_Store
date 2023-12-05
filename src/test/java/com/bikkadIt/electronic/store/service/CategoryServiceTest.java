@@ -82,4 +82,14 @@ public class CategoryServiceTest {
 
     }
 
+    @Test
+    public void getCategoryByIdTest() {
+        String categoryId = "pqrstuv";
+        Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
+        CategoryDto categoryDto = categoryService.getCategory(categoryId);
+        Assertions.assertNotNull(categoryDto);
+        Assertions.assertEquals(category.getTitle(), categoryDto.getTitle(), "Title not matched");
+
+    }
+
 }
