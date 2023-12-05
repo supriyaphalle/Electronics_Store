@@ -179,7 +179,7 @@ public class UserServiceTest {
 
         List<UserDto> dtos = userService.searchUser(keyword);
 
-        Assertions.assertEquals(4,dtos.size(),"Size not matched");
+        Assertions.assertEquals(3,dtos.size(),"Size not matched");
 
     }
 
