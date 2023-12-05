@@ -2,18 +2,24 @@ package com.bikkadIt.electronic.store.service;
 
 
 import com.bikkadIt.electronic.store.dtos.CategoryDto;
+import com.bikkadIt.electronic.store.dtos.PageableResponse;
+import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.repositories.CategoryRepository;
 import com.bikkadIt.electronic.store.services.CategoryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -47,13 +53,14 @@ public class CategoryServiceTest {
         Assertions.assertEquals("Electronics Product", dto.getTitle(), "Title not matched");
 
     }
+
     @Test
     public void updateCategoryTest() {
 
         String categoryId = "abcdxyz";
         CategoryDto dto = CategoryDto.builder()
                 .title("Products")
-                .description("This is catogory of Electronics products")
+                .description("This is category of Electronics products")
                 .coverImage("abc.png")
                 .build();
         Mockito.when(repository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
@@ -64,9 +71,15 @@ public class CategoryServiceTest {
         Assertions.assertEquals(dto.getTitle(), dto1.getTitle(), "Title not match");
     }
 
+    @Test
+    public void deleteCategoryTest() {
 
+        String categoryId = "abcdefgh";
+        Mockito.when(repository.findById(categoryId)).thenReturn(Optional.of(category));
+        categoryService.deleteCategory(categoryId);
 
+        Mockito.verify(repository, Mockito.times(1)).delete(category);
 
-
+    }
 
 }
