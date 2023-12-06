@@ -2,6 +2,7 @@ package com.bikkadIt.electronic.store.services.impl;
 
 import com.bikkadIt.electronic.store.dtos.ProductDto;
 import com.bikkadIt.electronic.store.entities.Product;
+import com.bikkadIt.electronic.store.exceptions.ResourceNotFoundException;
 import com.bikkadIt.electronic.store.repositories.ProductRepository;
 import com.bikkadIt.electronic.store.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -27,7 +28,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(ProductDto productDto, String productId) {
-        return null;
+
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
+        product.setTitle(productDto.getTitle());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setQuantity(productDto.getQuantity());
+        product.setLive(productDto.isLive());
+        product.setDiscountPrice(productDto.getDiscountPrice());
+        product.setStock(productDto.isStock());
+
+        Product save = productRepository.save(product);
+        return mapper.map(save,ProductDto.class);
+
     }
 
     @Override
