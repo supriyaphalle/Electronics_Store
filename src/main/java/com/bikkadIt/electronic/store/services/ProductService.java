@@ -15,11 +15,11 @@ public interface ProductService {
 
     ProductDto get(String productId);
 
-    PageableResponse<ProductDto> getAll();
+    PageableResponse<ProductDto> getAll(int pageNumber, int pageSize,String sortBy,String sortDir);
 
-    PageableResponse<ProductDto>getAllLive();
+    PageableResponse<ProductDto>getAllLive(int pageNumber, int pageSize,String sortBy,String sortDir);
 
-    PageableResponse<ProductDto> searchByTitle(String subTitle);
+    PageableResponse<ProductDto> searchByTitle(String subTitle,int pageNumber, int pageSize,String sortBy,String sortDir);
 
 
 
