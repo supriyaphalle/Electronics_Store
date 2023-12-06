@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.services;
 
+import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
 
 import java.util.List;
@@ -14,11 +15,11 @@ public interface ProductService {
 
     ProductDto get(String productId);
 
-    List<ProductDto>getAll();
+    PageableResponse<ProductDto> getAll();
 
-    List<ProductDto>getAllLive();
+    PageableResponse<ProductDto>getAllLive();
 
-    List<ProductDto> searchByTitle(String subTitle);
+    PageableResponse<ProductDto> searchByTitle(String subTitle);
 
 
 

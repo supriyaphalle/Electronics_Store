@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.services.impl;
 
+import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
 import com.bikkadIt.electronic.store.entities.Product;
 import com.bikkadIt.electronic.store.exceptions.ResourceNotFoundException;
@@ -61,17 +62,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAll() {
+    public PageableResponse<ProductDto> getAll() {
+
+
         return null;
     }
 
     @Override
-    public List<ProductDto> getAllLive() {
+    public PageableResponse<ProductDto> getAllLive() {
         return null;
     }
 
     @Override
-    public List<ProductDto> searchByTitle(String subTitle) {
+    public PageableResponse<ProductDto> searchByTitle(String subTitle) {
         return null;
     }
 }
