@@ -79,6 +79,23 @@ public class CategoryControllerTest {
         return null;
     }
 
+    @Test
+    public void updateCategoryTest() throws Exception {
+        String categoryId = "abcd";
+        CategoryDto dto = mapper.map(category, CategoryDto.class);
+        Mockito.when(categoryService.updateCategory(Mockito.any(), Mockito.anyString())).thenReturn(dto);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/category/" + categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(category))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").exists());
+
+
+    }
 
 
 }
