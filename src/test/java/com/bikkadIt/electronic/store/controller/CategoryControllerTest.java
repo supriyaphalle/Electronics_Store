@@ -93,9 +93,34 @@ public class CategoryControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").exists());
-
-
     }
 
+
+
+    @Test
+    public void getAllCategoryTest() throws Exception {
+
+        CategoryDto dto1 = CategoryDto.builder().title("TestCase").description("This is test case ").coverImage("pqrs.png").build();
+        CategoryDto dto2 = CategoryDto.builder().title("TestCase").description("This is test case ").coverImage("pqrs.png").build();
+        CategoryDto dto3 = CategoryDto.builder().title("TestCase").description("This is test case ").coverImage("pqrs.png").build();
+        CategoryDto dto4 = CategoryDto.builder().title("TestCase").description("This is test case ").coverImage("pqrs.png").build();
+
+        PageableResponse<CategoryDto> response = new PageableResponse<>();
+        response.setContent(Arrays.asList(dto1, dto2, dto3, dto4));
+        response.setLastPage(false);
+        response.setTotalElements(100);
+        response.setPageSize(10);
+        response.setPageNumber(20);
+
+        Mockito.when(categoryService.getAllCategory(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString())).thenReturn(response);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/category/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 }
