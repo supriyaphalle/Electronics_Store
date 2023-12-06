@@ -123,4 +123,19 @@ public class CategoryControllerTest {
 
     }
 
+    @Test
+    public void getCategoryByCategoryId() throws Exception {
+        String categoryId = "abcd";
+        CategoryDto dto = mapper.map(category, CategoryDto.class);
+        Mockito.when(categoryService.getCategory(Mockito.anyString())).thenReturn(dto);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/category/" + categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
 }
