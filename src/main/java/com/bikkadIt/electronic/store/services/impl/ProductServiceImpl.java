@@ -47,6 +47,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(String productId) {
 
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
+        productRepository.delete(product);
+
+
     }
 
     @Override
