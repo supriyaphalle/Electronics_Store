@@ -21,9 +21,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto create(ProductDto productDto) {
-        Product product= mapper.map(productDto,Product.class);
+        Product product = mapper.map(productDto, Product.class);
         Product save = productRepository.save(product);
-        return mapper.map(save,ProductDto.class);
+        return mapper.map(save, ProductDto.class);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStock(productDto.isStock());
 
         Product save = productRepository.save(product);
-        return mapper.map(save,ProductDto.class);
+        return mapper.map(save, ProductDto.class);
 
     }
 
@@ -50,12 +50,14 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
         productRepository.delete(product);
 
-
     }
 
     @Override
     public ProductDto get(String productId) {
-        return null;
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
+
+        return mapper.map(product,ProductDto.class);
     }
 
     @Override
