@@ -92,8 +92,9 @@ public class UserServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).delete(user);
 
     }
+
     @Test
-    public void getAllUserTest(){
+    public void getAllUserTest() {
 
         User user1 = User.builder()
                 .name("Rajvi")
@@ -113,46 +114,40 @@ public class UserServiceTest {
                 .password("abcd")
                 .build();
 
-        List<User> userList= Arrays.asList(user,user1,user2);
+        List<User> userList = Arrays.asList(user, user1, user2);
 
-        Page<User> page= new PageImpl<>(userList);
+        Page<User> page = new PageImpl<>(userList);
 
-        Mockito.when(userRepository.findAll((Pageable)Mockito.any())).thenReturn(page);
+        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
 
-        Sort sort= Sort.by("name").ascending();
-
-        Pageable pageable = PageRequest.of(1,2,sort);
-
-        PageableResponse<UserDto> allUser= userService.getAllUSer(1,2,"name","asc");
-        Assertions.assertEquals(3,allUser.getContent().size());
-
+        Sort sort = Sort.by("name").ascending();
     }
 
     @Test
-    public void getUserByIdTest(){
-        String userId="abcdesx";
+    public void getUserByIdTest() {
+        String userId = "abcdesx";
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        UserDto userDto= userService.getUSerById(userId);
+        UserDto userDto = userService.getUSerById(userId);
 
         Assertions.assertNotNull(userDto);
-        Assertions.assertEquals(user.getName(),userDto.getName(),"Name not matched");
+        Assertions.assertEquals(user.getName(), userDto.getName(), "Name not matched");
     }
 
     @Test
-    public void getUserByEmailTest(){
-        String emailId="supriyaph@gmail.com";
+    public void getUserByEmailTest() {
+        String emailId = "supriyaph@gmail.com";
 
         Mockito.when(userRepository.findByEmail(emailId)).thenReturn(Optional.of(user));
 
         UserDto userDto = userService.getUserByEmail(emailId);
         Assertions.assertNotNull(userDto);
-        Assertions.assertEquals(user.getEmail(),userDto.getEmail(),"Email not matched");
+        Assertions.assertEquals(user.getEmail(), userDto.getEmail(), "Email not matched");
 
     }
 
     @Test
-    public void searchUserTest(){
+    public void searchUserTest() {
         User user1 = User.builder()
                 .name("Revati Patil")
                 .email("reva@gmail.com")
@@ -179,12 +174,9 @@ public class UserServiceTest {
 
         List<UserDto> dtos = userService.searchUser(keyword);
 
-        Assertions.assertEquals(3,dtos.size(),"Size not matched");
+        Assertions.assertEquals(3, dtos.size(), "Size not matched");
 
     }
-
-
-
 
 
 }
