@@ -43,7 +43,11 @@ public class ProductController {
         ApiResponseMessage message = ApiResponseMessage.builder().message("Product Deleted successfully!!").success(true).status(HttpStatus.OK).build();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
-
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDto> getProduct(@PathVariable String productId) {
+        ProductDto dto = productService.get(productId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
 
 
 
