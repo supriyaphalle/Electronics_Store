@@ -62,7 +62,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> updateData(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
         logger.info("Entering Request to update category Data for id:{}", categoryId);
         CategoryDto update = categoryService.updateCategory(categoryDto, categoryId);
-        logger.info("Entering Request to update category Data for id:{}", categoryId);
+        logger.info("Completed Request to update category Data for id:{}", categoryId);
         return new ResponseEntity<CategoryDto>(update, HttpStatus.OK);
     }
 
@@ -95,9 +95,9 @@ public class CategoryController {
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
-        logger.info("Entering request to delete category data ");
+        logger.info("Entering request to get all category data ");
         PageableResponse<CategoryDto> allList = categoryService.getAllCategory(pageNumber, pageSize, sortBy, sortDir);
-        logger.info("Completed request to delete category data ");
+        logger.info("Completed request to get all category data ");
         return new ResponseEntity<>(allList, HttpStatus.OK);
     }
 
