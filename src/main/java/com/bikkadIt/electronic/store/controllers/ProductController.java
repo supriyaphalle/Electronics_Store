@@ -36,6 +36,14 @@ public class ProductController {
 
     }
 
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<ApiResponseMessage> delete(@PathVariable String productId) {
+        productService.delete(productId);
+
+        ApiResponseMessage message = ApiResponseMessage.builder().message("Product Deleted successfully!!").success(true).status(HttpStatus.OK).build();
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
 
 
 
