@@ -20,6 +20,13 @@ public class ProductController {
     ProductService productService;
 
 
+    /**
+     * @return http status for created data
+     * @Param productDto
+     * @author SUPRIYA
+     * @apiNote To create product data in database
+     * @since V 1.0
+     */
     @PostMapping("/")
     public ResponseEntity<ProductDto> createData(@Valid @RequestBody ProductDto productDto) {
         ProductDto dto = productService.create(productDto);
@@ -27,6 +34,13 @@ public class ProductController {
     }
 
 
+    /**
+     * @return http status for update data
+     * @Param productId, productDto
+     * @author SUPRIYA
+     * @apiNote To update product data in database
+     * @since V 1.0
+     */
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable String productId, @Valid @RequestBody ProductDto productDto) {
 
@@ -36,6 +50,13 @@ public class ProductController {
 
     }
 
+    /**
+     * @return api response for delete data
+     * @Param productId
+     * @author SUPRIYA
+     * @apiNote To delete product data in database
+     * @since V 1.0
+     */
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponseMessage> delete(@PathVariable String productId) {
         productService.delete(productId);
@@ -43,12 +64,27 @@ public class ProductController {
         ApiResponseMessage message = ApiResponseMessage.builder().message("Product Deleted successfully!!").success(true).status(HttpStatus.OK).build();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+    /**
+     * @return product_dto
+     * @Param productId
+     * @author SUPRIYA
+     * @apiNote To get single  product data from database
+     * @since V 1.0
+     */
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String productId) {
         ProductDto dto = productService.get(productId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    /**
+     * @return list of all product_dto
+     * @Param
+     * @author SUPRIYA
+     * @apiNote To get all product data from database
+     * @since V 1.0
+     */
     @GetMapping("/")
     public ResponseEntity<PageableResponse<ProductDto>> getAll(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
@@ -62,6 +98,13 @@ public class ProductController {
 
     }
 
+    /**
+     * @return list of all live product_dto
+     * @Param
+     * @author SUPRIYA
+     * @apiNote To get all live product data from database
+     * @since V 1.0
+     */
     @GetMapping("/live")
     public ResponseEntity<PageableResponse<ProductDto>> getAllLive(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
@@ -75,6 +118,13 @@ public class ProductController {
 
     }
 
+    /**
+     * @return list of all searched product_dto
+     * @Param
+     * @author SUPRIYA
+     * @apiNote To search product data from database
+     * @since V 1.0
+     */
     @GetMapping("/search/{keyword}")
     public ResponseEntity<PageableResponse<ProductDto>> searchProduct(
             @PathVariable String keyword,
@@ -84,15 +134,10 @@ public class ProductController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
 
-        PageableResponse<ProductDto> all = productService.searchByTitle(keyword,pageNumber, pageSize, sortBy, sortDir);
+        PageableResponse<ProductDto> all = productService.searchByTitle(keyword, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(all, HttpStatus.OK);
 
     }
-
-
-
-
-
 
 
 }
