@@ -2,17 +2,28 @@ package com.bikkadIt.electronic.store.controllers;
 
 import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
+import com.bikkadIt.electronic.store.dtos.ImageResponse;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
+import com.bikkadIt.electronic.store.services.FileService;
 import com.bikkadIt.electronic.store.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/product")
@@ -21,7 +32,13 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    FileService fileService;
+
     Logger logger = LoggerFactory.getLogger(ProductController.class);
+
+    @Value("$product.profile.image.path")
+    private String imageUploadPath;
 
     /**
      * @return http status for created data
@@ -148,6 +165,28 @@ public class ProductController {
         return new ResponseEntity<>(all, HttpStatus.OK);
 
     }
+
+
+
+
+
+
+    @PostMapping("/image/{productId}")
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("productImage")MultipartFile image,@PathVariable String productId) throws IOException {
+        logger.info("Entering Request to upload  image file with userId:{} ", productId);
+        String imageName = fileService.uploadFile(image, imageUploadPath);
+
+        ProductDto productDto = productService.get(productId);
+        productDto.setProductImage(imageName);
+        ProductDto update = productService.update(productDto, productId);
+
+        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
+        logger.info("Completed  Request to upload   image file with userId:{} ", productId);
+        return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+    }
+
+
+
 
 
 }
