@@ -18,12 +18,11 @@ public class ProductDto {
     private String productId;
     @NotBlank
     @Size(min = 4, message = "title must be of minimum 4 charters")
-    private String title;
+    private String name;
 
     @NotBlank(message = "Description required!!")
     @Size(min = 4, message = "Description must be of minimum 4 charters")
     private String description;
-
 
     private int price;
     private int quantity;
@@ -31,5 +30,6 @@ public class ProductDto {
     private boolean live;
     private boolean stock;
     private int discountPrice;
+    private String productImage;
 
 }

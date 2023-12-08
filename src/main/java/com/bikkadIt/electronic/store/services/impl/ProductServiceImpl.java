@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,13 +45,14 @@ public class ProductServiceImpl implements ProductService {
 
 
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
-        product.setTitle(productDto.getTitle());
+        product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
         product.setLive(productDto.isLive());
         product.setDiscountPrice(productDto.getDiscountPrice());
         product.setStock(productDto.isStock());
+        product.setProductImage(productDto.getProductImage());
 
         Product save = productRepository.save(product);
         return mapper.map(save, ProductDto.class);
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
     public PageableResponse<ProductDto> searchByTitle(String subTitle, int pageNumber, int pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<Product> page = productRepository.findByTitleContaining(subTitle, pageable);
+        Page<Product> page = productRepository.findByNameContaining(subTitle, pageable);
         return Helper.getPageableResponse(page, ProductDto.class);
 
     }
