@@ -185,7 +185,15 @@ public class ProductController {
         return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
     }
 
-
+    @GetMapping("/image/{productId}")
+    public  void getProductImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
+        logger.info("Entering Request to get  image file with userId:{} ", productId);
+        ProductDto dto = productService.get(productId);
+        InputStream resource = fileService.getResource(imageUploadPath, dto.getProductImage());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        logger.info("Completed  Request to get   image file with userId:{} ", productId);
+        StreamUtils.copy(resource, response.getOutputStream());
+    }
 
 
 
