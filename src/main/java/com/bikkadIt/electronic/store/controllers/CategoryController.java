@@ -1,12 +1,10 @@
 package com.bikkadIt.electronic.store.controllers;
 
 import com.bikkadIt.electronic.store.constant.AppConstants;
-import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
-import com.bikkadIt.electronic.store.dtos.CategoryDto;
-import com.bikkadIt.electronic.store.dtos.ImageResponse;
-import com.bikkadIt.electronic.store.dtos.PageableResponse;
+import com.bikkadIt.electronic.store.dtos.*;
 import com.bikkadIt.electronic.store.services.CategoryService;
 import com.bikkadIt.electronic.store.services.FileService;
+import com.bikkadIt.electronic.store.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,9 @@ public class CategoryController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    ProductService productService;
 
     @Autowired
     FileService fileService;
@@ -152,6 +153,19 @@ public class CategoryController {
         logger.info("Completed request to get image file with categoryID:{}", categoryId);
         StreamUtils.copy(resource, response.getOutputStream());
     }
+
+    @PostMapping("/{categoryId}/product")
+    public ResponseEntity<ProductDto> createProductWithCategory(
+            @PathVariable("categoryId") String categoryId,
+            @RequestBody ProductDto productDto
+
+    ) {
+        logger.info("Entering request to create product with categoryID:{}", categoryId);
+        ProductDto productDto1 = productService.createWithCategory(productDto, categoryId);
+        logger.info("Completed request to create product with categoryID:{}", categoryId);
+        return new ResponseEntity<>(productDto1, HttpStatus.CREATED);
+    }
+
 
 
 }
