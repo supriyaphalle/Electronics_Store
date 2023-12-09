@@ -1,10 +1,13 @@
 package com.bikkadIt.electronic.store.services.impl;
 
+import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
+import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.entities.Product;
 import com.bikkadIt.electronic.store.exceptions.ResourceNotFoundException;
 import com.bikkadIt.electronic.store.helper.Helper;
+import com.bikkadIt.electronic.store.repositories.CategoryRepository;
 import com.bikkadIt.electronic.store.repositories.ProductRepository;
 import com.bikkadIt.electronic.store.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -23,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -102,6 +108,24 @@ public class ProductServiceImpl implements ProductService {
         return Helper.getPageableResponse(page, ProductDto.class);
 
     }
+
+    @Override
+    public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
+
+        Product product = mapper.map(productDto, Product.class);
+        String productId = UUID.randomUUID().toString();
+        product.setProductId(productId);
+
+        product.setAddedDate(new Date());
+        product.setCategory(category);
+        Product save = productRepository.save(product);
+
+        ProductDto map = mapper.map(save, ProductDto.class);
+        return map;
+    }
+
+
 
 
 }

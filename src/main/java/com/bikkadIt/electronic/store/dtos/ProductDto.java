@@ -32,4 +32,6 @@ public class ProductDto {
     private int discountPrice;
     private String productImage;
 
+    private CategoryDto category;
+
 }
