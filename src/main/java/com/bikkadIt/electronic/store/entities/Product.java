@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -16,36 +13,40 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="product")
+@Table(name = "product")
 public class Product {
 
     @Id
     private String productId;
 
-    @Column(name="product_name")
+    @Column(name = "product_name")
     private String name;
 
-    @Column(name="product_description")
+    @Column(name = "product_description")
     private String description;
 
-    @Column(name="product_price")
+    @Column(name = "product_price")
     private int price;
 
-    @Column(name="product_quantity")
+    @Column(name = "product_quantity")
     private int quantity;
 
-    @Column(name="product_date")
+    @Column(name = "product_date")
     private Date addedDate;
 
-    @Column(name="product_live")
+    @Column(name = "product_live")
     private boolean live;
-    @Column(name="product_stock")
+
+    @Column(name = "product_stock")
     private boolean stock;
 
-    @Column(name="discount_Price")
+    @Column(name = "discount_Price")
     private int discountPrice;
 
     @Column(name = "product_Image")
     private String productImage;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_ID")
+    private Category category;
 }
