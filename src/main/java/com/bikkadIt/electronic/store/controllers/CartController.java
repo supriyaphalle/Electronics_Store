@@ -22,5 +22,17 @@ public class CartController {
         return new ResponseEntity<>(cartDto, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{userId}/items/{itemId}")
+    public ResponseEntity<ApiResponseMessage> removeItemFromCart(
+            @PathVariable String userId, @PathVariable int itemId
+    ) {
+        cartService.removeItemFormCart(userId, itemId);
+        ApiResponseMessage response = ApiResponseMessage.builder()
+                .message("Item is removed!!")
+                .success(true)
+                .status(HttpStatus.OK)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
