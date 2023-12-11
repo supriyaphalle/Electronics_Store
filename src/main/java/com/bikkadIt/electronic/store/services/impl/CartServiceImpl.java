@@ -94,7 +94,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeItemFormCart(String userId, int cartItem) {
 
-
+        CartItem item = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException("Cart Item not found in database!!"));
+        cartItemRepository.delete(item);
 
     }
 
