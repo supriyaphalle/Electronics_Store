@@ -101,7 +101,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void clearCart(String userId) {
-
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found in database!!"));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Cart of given user not found !!"));
+        cart.getItems().clear();
+        cartRepository.save(cart);
 
     }
 
