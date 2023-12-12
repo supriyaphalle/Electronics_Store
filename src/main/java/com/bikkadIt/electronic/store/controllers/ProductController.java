@@ -166,13 +166,16 @@ public class ProductController {
 
     }
 
-
-
-
-
+    /**
+     * @return image response to upload file
+     * @Param
+     * @author SUPRIYA
+     * @apiNote to upload image image file
+     * @since V 1.0
+     */
 
     @PostMapping("/image/{productId}")
-    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("productImage")MultipartFile image,@PathVariable String productId) throws IOException {
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("productImage") MultipartFile image, @PathVariable String productId) throws IOException {
         logger.info("Entering Request to upload  image file with userId:{} ", productId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
 
@@ -182,11 +185,18 @@ public class ProductController {
 
         ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).message(AppConstants.UPLOAD_RESPONSE).status(HttpStatus.CREATED).build();
         logger.info("Completed  Request to upload   image file with userId:{} ", productId);
-        return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+        return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * @return to get product image
+     * @Param
+     * @author SUPRIYA
+     * @apiNote To get product image
+     * @since V 1.0
+     */
     @GetMapping("/image/{productId}")
-    public  void getProductImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
+    public void getProductImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
         logger.info("Entering Request to get  image file with userId:{} ", productId);
         ProductDto dto = productService.get(productId);
         InputStream resource = fileService.getResource(imageUploadPath, dto.getProductImage());
@@ -194,7 +204,6 @@ public class ProductController {
         logger.info("Completed  Request to get   image file with userId:{} ", productId);
         StreamUtils.copy(resource, response.getOutputStream());
     }
-
 
 
 }
