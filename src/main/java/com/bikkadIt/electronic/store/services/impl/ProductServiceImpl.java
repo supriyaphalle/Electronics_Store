@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(String productId) {
         logger.info("Initiating the dao call for the delete product data for id :{} ", productId);
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
         productRepository.delete(product);
         logger.info("Completed the dao call for the update product data for id :{} ", productId);
     }
@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto get(String productId) {
         logger.info("Initiating the dao call to get product data for id :{} ", productId);
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found of given Id"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
         logger.info("Completed the dao call to get product data for id :{} ", productId);
         return mapper.map(product, ProductDto.class);
     }
