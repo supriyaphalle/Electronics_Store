@@ -15,6 +15,8 @@ import com.bikkadIt.electronic.store.repositories.ProductRepository;
 import com.bikkadIt.electronic.store.repositories.UserRepository;
 import com.bikkadIt.electronic.store.services.CartService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,23 +30,21 @@ import java.util.stream.Collectors;
 @Service
 public class CartServiceImpl implements CartService {
 
+    Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CartRepository cartRepository;
-
     @Autowired
     private ModelMapper mapper;
-
     @Autowired
     private CartItemRepository cartItemRepository;
 
     @Override
     public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
+        logger.info("Initiating dao call to add item into cart with userId:{}", userId);
         int quantity = request.getQuantity();
         String productId = request.getProductId();
 
@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
         List<CartItem> updatedITems = items.stream().map(item -> {
 
             if (item.getProduct().getProductId().equals(productId)) {
-                item.setQuantity(quantity+item.getQuantity()); // change
+                item.setQuantity(quantity + item.getQuantity()); // change
                 item.setTotalPrice(quantity * product.getPrice() + item.getTotalPrice());
                 updated.set(true);
             }
@@ -88,31 +88,36 @@ public class CartServiceImpl implements CartService {
         }
         cart.setUser(user);
         Cart updateCart = cartRepository.save(cart);
-
+        logger.info("Completed dao call to add item into cart with userId:{}", userId);
         return mapper.map(updateCart, CartDto.class);
     }
 
     @Override
     public void removeItemFormCart(String userId, int cartItem) {
-
+        logger.info("Initiating dao call to remove  item from cart with userId:{}", userId);
         CartItem item = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
+        logger.info("Completed dao call to remove  item from cart with userId:{}", userId);
         cartItemRepository.delete(item);
 
     }
 
     @Override
     public void clearCart(String userId) {
+        logger.info("Initiating dao call to clear  cart with userId:{}", userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
         cart.getItems().clear();
+        logger.info("Completed dao call to clear cart with userId:{}", userId);
         cartRepository.save(cart);
 
     }
 
     @Override
     public CartDto getCartByUser(String userId) {
+        logger.info("Initiating dao call to get  cart with userId:{}", userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
+        logger.info("Completed dao call to clear  cart with userId:{}", userId);
         return mapper.map(cart, CartDto.class);
     }
 }
