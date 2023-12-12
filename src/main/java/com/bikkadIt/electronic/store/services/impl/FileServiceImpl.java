@@ -19,7 +19,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadFile(MultipartFile file, String path) throws IOException {
-
+        logger.info("Entering into upload image file ");
         String originalFileName = file.getOriginalFilename();
         logger.info("Filename: {}", originalFileName);
         String fileName = UUID.randomUUID().toString();
@@ -36,6 +36,7 @@ public class FileServiceImpl implements FileService {
             }
 
             Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
+            logger.info("Completed upload image file");
             return fileNameWithExtension;
         } else {
             throw new BadApiRequestException("File with this " + extension + " not allowed!");
@@ -45,8 +46,10 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException {
+        logger.info("Entering into get resource  method");
         String fullPath = path  + name ;
         InputStream inputStream = new FileInputStream(fullPath);
+        logger.info("Completed  get resource  method");
         return inputStream;
     }
 }
