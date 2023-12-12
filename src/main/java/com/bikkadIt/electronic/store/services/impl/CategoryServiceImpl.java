@@ -64,11 +64,11 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(String categoryId) {
         logger.info("Initiating the dao call for the delete category data for id:{}", categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found "));
-        String fullPath= imagePath+ category.getCoverImage();
-        try{
+        String fullPath = imagePath + category.getCoverImage();
+        try {
             Path path = Paths.get(fullPath);
             Files.delete(path);
-        } catch (NoSuchFileException e){
+        } catch (NoSuchFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
