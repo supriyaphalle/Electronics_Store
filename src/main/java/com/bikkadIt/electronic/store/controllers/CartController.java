@@ -20,6 +20,13 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    /**
+     * @return http status for added cart data
+     * @Param userID, AddItemToCartRequest
+     * @author SUPRIYA
+     * @apiNote To add item yo cart
+     * @since V 1.0
+     */
     @PostMapping("/{userId}")
     public ResponseEntity<CartDto> addItemToCart(@PathVariable String userId, @RequestBody AddItemToCartRequest request) {
 
@@ -29,6 +36,13 @@ public class CartController {
         return new ResponseEntity<>(cartDto, HttpStatus.CREATED);
     }
 
+    /**
+     * @return ApiResponse to remove cart data
+     * @Param userID, itemId
+     * @author SUPRIYA
+     * @apiNote remove item from cart
+     * @since V 1.0
+     */
     @DeleteMapping("/{userId}/items/{itemId}")
     public ResponseEntity<ApiResponseMessage> removeItemFromCart(
             @PathVariable String userId, @PathVariable int itemId
@@ -44,6 +58,13 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * @return ApiResponse to clear cart
+     * @Param userID
+     * @author SUPRIYA
+     * @apiNote clear  cart
+     * @since V 1.0
+     */
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponseMessage> clearCart(@PathVariable String userId) {
         logger.info("Entering Request to clear cart for id:{}", userId);
@@ -57,6 +78,13 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * @return CartDto
+     * @Param userID
+     * @author SUPRIYA
+     * @apiNote get all cart data
+     * @since V 1.0
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<CartDto> getCart(@PathVariable String userId) {
         logger.info("Entering Request to get cart for id:{}", userId);
