@@ -16,7 +16,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/userId")
+    @PostMapping("/{userId}")
     public ResponseEntity<CartDto> addItemToCart(@PathVariable String userId, @RequestBody AddItemToCartRequest request) {
         CartDto cartDto = cartService.addItemToCart(userId, request);
         return new ResponseEntity<>(cartDto, HttpStatus.CREATED);
@@ -37,10 +37,9 @@ public class CartController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponseMessage> clearCart(@PathVariable String userId) {
-
         cartService.clearCart(userId);
-        ApiResponseMessage response = ApiResponseMessage.builder()
-                .message("Item is removed!!")
+        ApiResponseMessage response  = ApiResponseMessage.builder()
+                .message("cart is cleared!!")
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();

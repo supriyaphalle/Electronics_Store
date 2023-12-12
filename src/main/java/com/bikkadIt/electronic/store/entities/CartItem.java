@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="cart_items")
+@Table(name = "cart_items")
 public class CartItem {
 
     @Id
