@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.services.impl;
 
+import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.AddItemToCartRequest;
 import com.bikkadIt.electronic.store.dtos.CartDto;
 import com.bikkadIt.electronic.store.entities.Cart;
@@ -48,11 +49,11 @@ public class CartServiceImpl implements CartService {
         String productId = request.getProductId();
 
         if (quantity <= 0) {
-            throw new BadApiRequestException("Requested quantity is not valid");
+            throw new BadApiRequestException(AppConstants.INVALID_QUANTITY);
         }
 
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found in database!!"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found in database!!"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
 
         Cart cart = null;
         try {
@@ -94,15 +95,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeItemFormCart(String userId, int cartItem) {
 
-        CartItem item = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException("Cart Item not found in database!!"));
+        CartItem item = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
         cartItemRepository.delete(item);
 
     }
 
     @Override
     public void clearCart(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found in database!!"));
-        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Cart of given user not found !!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
         cart.getItems().clear();
         cartRepository.save(cart);
 
@@ -110,8 +111,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto getCartByUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found in database!!"));
-        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Cart of given user not found !!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
         return mapper.map(cart, CartDto.class);
     }
 }

@@ -1,5 +1,6 @@
 package com.bikkadIt.electronic.store.controllers;
 
+import com.bikkadIt.electronic.store.constant.AppConstants;
 import com.bikkadIt.electronic.store.dtos.AddItemToCartRequest;
 import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
 import com.bikkadIt.electronic.store.dtos.CartDto;
@@ -28,7 +29,7 @@ public class CartController {
     ) {
         cartService.removeItemFormCart(userId, itemId);
         ApiResponseMessage response = ApiResponseMessage.builder()
-                .message("Item is removed!!")
+                .message(AppConstants.REMOVE_CART)
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();
@@ -39,7 +40,7 @@ public class CartController {
     public ResponseEntity<ApiResponseMessage> clearCart(@PathVariable String userId) {
         cartService.clearCart(userId);
         ApiResponseMessage response  = ApiResponseMessage.builder()
-                .message("cart is cleared!!")
+                .message(AppConstants.CLEAR_CART)
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();
