@@ -1,6 +1,7 @@
 package com.bikkadIt.electronic.store.service;
 
 
+import com.bikkadIt.electronic.store.dtos.CategoryDto;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.User;
@@ -121,6 +122,14 @@ public class UserServiceTest {
         Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
 
         Sort sort = Sort.by("name").ascending();
+
+
+        PageRequest request = PageRequest.of(1, 2, sort);
+
+        PageableResponse<UserDto> allUser = userService.getAllUSer(1, 2, "name", "asc");
+
+        Assertions.assertEquals(3,allUser.getContent().size());
+
     }
 
     @Test
