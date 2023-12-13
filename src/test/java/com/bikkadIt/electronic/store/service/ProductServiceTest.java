@@ -143,11 +143,26 @@ public class ProductServiceTest {
         Assertions.assertEquals(3, allProduct.getContent().size());
     }
 
-//        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-//        Page<Product> page = productRepository.findByLiveTrue(pageable);
-//        logger.info("Completed the dao call for the get all live product data ");
-//        return Helper.getPageableResponse(page, ProductDto.class);
+
+    @Test
+    public void searchProductTest() {
+        Product product1 = product = Product.builder().name("Mobile").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+
+        Product product2 = product = Product.builder().name("Mobile").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+        List<Product> productList = Arrays.asList(product, product1, product2);
+
+        Page<Product> products = new PageImpl<>(productList);
+
+        Mockito.when(productRepository.findByNameContaining(Mockito.anyString(), Mockito.any())).thenReturn(products);
+        PageableResponse<ProductDto> searchByTitle = productService.searchByTitle("mobile", 1, 2, "name", "asc");
+        Assertions.assertEquals(3, searchByTitle.getContent().size());
+
+    }
+
 
 }
 
