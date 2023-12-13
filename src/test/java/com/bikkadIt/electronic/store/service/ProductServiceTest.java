@@ -1,7 +1,9 @@
 package com.bikkadIt.electronic.store.service;
 
 import com.bikkadIt.electronic.store.dtos.CategoryDto;
+import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
+import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.entities.Product;
 import com.bikkadIt.electronic.store.repositories.ProductRepository;
@@ -14,8 +16,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -85,6 +90,36 @@ public class ProductServiceTest {
         Mockito.verify(productRepository, Mockito.times(1)).delete(product);
 
     }
+
+    @Test
+    public void getAllProduct() {
+        Product product1 = product = Product.builder().name("Mobile").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+
+        Product product2 = product = Product.builder().name("Mobile").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+        List<Product> productList = Arrays.asList(product, product1, product2);
+
+        Page<Product> products = new PageImpl<>(productList);
+        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(products);
+        Sort sort = Sort.by("name").ascending();
+
+
+        PageRequest request = PageRequest.of(1, 2, sort);
+
+        PageableResponse<ProductDto> allProduct = productService.getAll(1, 2, "name", "asc");
+
+        Assertions.assertEquals(3, allProduct.getContent().size());
+
+    }
+
+
+//        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+//
+//        Sort sort = Sort.by("name").ascending();
+//    }
 
 }
 
