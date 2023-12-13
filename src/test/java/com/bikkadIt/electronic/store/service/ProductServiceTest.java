@@ -3,7 +3,6 @@ package com.bikkadIt.electronic.store.service;
 import com.bikkadIt.electronic.store.dtos.CategoryDto;
 import com.bikkadIt.electronic.store.dtos.PageableResponse;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
-import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.entities.Product;
 import com.bikkadIt.electronic.store.repositories.CategoryRepository;
@@ -177,7 +176,25 @@ public class ProductServiceTest {
 
         ProductDto productDto = productService.createWithCategory(mapper.map(product, ProductDto.class), categoryId);
 
-        Assertions.assertEquals(productDto.getName(),product.getName(),"Name not match");
+        Assertions.assertEquals(productDto.getName(), product.getName(), "Name not match");
+
+    }
+
+    @Test
+    public void updateCategoryTest() {
+        String categoryId = "abcd";
+        String productId = "pqrs";
+
+        ProductDto dto = ProductDto.builder().name("Laptop").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(mapper.map(category, CategoryDto.class)).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mapper.map(dto,Product.class)));
+        Mockito.when(categoryRepository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+        ProductDto productDto1 = productService.updateCategory(productId, categoryId);
+        Assertions.assertEquals(category.getTitle(), productDto1.getCategory().getTitle(), "category title not match");
 
     }
 
