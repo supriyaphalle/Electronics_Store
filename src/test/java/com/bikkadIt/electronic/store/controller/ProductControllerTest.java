@@ -1,7 +1,6 @@
 package com.bikkadIt.electronic.store.controller;
 
 import com.bikkadIt.electronic.store.controllers.ProductController;
-import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
 import com.bikkadIt.electronic.store.dtos.ProductDto;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.entities.Product;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -109,16 +107,29 @@ public class ProductControllerTest {
         String productId = "abcd";
 
 //        Mockito.verify(productService, Mockito.times(1)).delete(productId);
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/product/"+productId)
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/product/" + productId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(convertObjectToJsonString(product))
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                       )
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
 
+    @Test
+    public void getPRProductByIdTest() throws Exception {
+        String productId="abcd";
+        Mockito.when(productService.get(Mockito.anyString())).thenReturn(mapper.map(product,ProductDto.class));
 
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/product/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        ).andDo(print())
+                .andExpect(status().isOk())
+                ;
 
     }
+
+
 
 
 }
