@@ -29,16 +29,13 @@ public class ProductControllerTest {
 
     @MockBean
     ProductService productService;
-
-    @Autowired
-    private MockMvc mockMvc;
-
     @Autowired
     ModelMapper mapper;
-
+    @Autowired
+    private MockMvc mockMvc;
     private Product product;
 
-    private  Category category;
+    private Category category;
 
     @BeforeEach
     void init() {
@@ -60,10 +57,10 @@ public class ProductControllerTest {
         ProductDto productDto = mapper.map(product, ProductDto.class);
         Mockito.when(productService.create(Mockito.any())).thenReturn(productDto);
         this.mockMvc.perform(
-                MockMvcRequestBuilders.post("/product/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(convertObjectToJsonString(product))
-                        .accept(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.post("/product/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(convertObjectToJsonString(product))
+                                .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -82,6 +79,22 @@ public class ProductControllerTest {
     }
 
 
+    @Test
+    public void updateProductTest() throws Exception {
+        String productId = "abcd";
+        ProductDto dto = this.mapper.map(product, ProductDto.class);
+
+        Mockito.when(productService.update(Mockito.any(), Mockito.anyString())).thenReturn(dto);
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/product/" + productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(product))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists());
+
+
+    }
 
 
 
