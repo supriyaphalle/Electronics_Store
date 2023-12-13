@@ -6,6 +6,7 @@ import com.bikkadIt.electronic.store.dtos.ProductDto;
 import com.bikkadIt.electronic.store.dtos.UserDto;
 import com.bikkadIt.electronic.store.entities.Category;
 import com.bikkadIt.electronic.store.entities.Product;
+import com.bikkadIt.electronic.store.repositories.CategoryRepository;
 import com.bikkadIt.electronic.store.repositories.ProductRepository;
 import com.bikkadIt.electronic.store.services.ProductService;
 import org.junit.jupiter.api.Assertions;
@@ -28,6 +29,9 @@ public class ProductServiceTest {
 
     @MockBean
     ProductRepository productRepository;
+
+    @MockBean
+    CategoryRepository categoryRepository;
 
     @Autowired
     ProductService productService;
@@ -160,6 +164,20 @@ public class ProductServiceTest {
         Mockito.when(productRepository.findByNameContaining(Mockito.anyString(), Mockito.any())).thenReturn(products);
         PageableResponse<ProductDto> searchByTitle = productService.searchByTitle("mobile", 1, 2, "name", "asc");
         Assertions.assertEquals(3, searchByTitle.getContent().size());
+
+    }
+
+
+    @Test
+    public void createWithCategoryProduct() {
+
+        String categoryId = "abcd";
+        Mockito.when(categoryRepository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+        ProductDto productDto = productService.createWithCategory(mapper.map(product, ProductDto.class), categoryId);
+
+        Assertions.assertEquals(productDto.getName(),product.getName(),"Name not match");
 
     }
 
