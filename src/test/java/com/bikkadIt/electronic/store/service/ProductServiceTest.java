@@ -106,7 +106,6 @@ public class ProductServiceTest {
         Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(products);
         Sort sort = Sort.by("name").ascending();
 
-
         PageRequest request = PageRequest.of(1, 2, sort);
 
         PageableResponse<ProductDto> allProduct = productService.getAll(1, 2, "name", "asc");
@@ -115,11 +114,15 @@ public class ProductServiceTest {
 
     }
 
+    @Test
+    public void getProductByIdTest() {
+        String productId = "abcdefgh";
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
+        ProductDto productDto = productService.get(productId);
+        Assertions.assertNotNull(productDto);
+        Assertions.assertEquals(product.getName(), productDto.getName(), "Product name not matched");
+    }
 
-//        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
-//
-//        Sort sort = Sort.by("name").ascending();
-//    }
 
 }
 
