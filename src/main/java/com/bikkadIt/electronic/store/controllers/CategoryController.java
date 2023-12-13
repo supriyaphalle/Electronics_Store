@@ -154,6 +154,14 @@ public class CategoryController {
         StreamUtils.copy(resource, response.getOutputStream());
     }
 
+
+    /**
+     * @return ProductDto
+     * @Param categoryID , productDto
+     * @author SUPRIYA
+     * @apiNote To create Product with category ID
+     * @since V 1.0
+     */
     @PostMapping("/{categoryId}/product")
     public ResponseEntity<ProductDto> createProductWithCategory(
             @PathVariable("categoryId") String categoryId,
@@ -166,6 +174,14 @@ public class CategoryController {
         return new ResponseEntity<>(productDto1, HttpStatus.CREATED);
     }
 
+
+    /**
+     * @return ProductDto
+     * @Param categoryID , productId
+     * @author SUPRIYA
+     * @apiNote To update category of Product data
+     * @since V 1.0
+     */
     @PutMapping("/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> updateCategoryOfProduct(
             @PathVariable String categoryId, @PathVariable String productId
