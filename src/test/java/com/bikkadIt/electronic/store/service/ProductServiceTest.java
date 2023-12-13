@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Date;
+import java.util.Optional;
 
 @SpringBootTest
 public class ProductServiceTest {
@@ -46,7 +47,6 @@ public class ProductServiceTest {
                 .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
                 .addedDate(new Date()).description("This is Product service test").build();
 
-
     }
 
     @Test
@@ -60,6 +60,22 @@ public class ProductServiceTest {
 
     }
 
+    @Test
+    public void updateProductData() {
+
+        String productId = "abcd";
+
+        ProductDto dto = ProductDto.builder().name("Laptop").price(15000).stock(true).live(true)
+                .productImage("pqr.png").quantity(13).category(mapper.map(category, CategoryDto.class)).discountPrice(14000)
+                .addedDate(new Date()).description("This is Product service test").build();
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+        ProductDto update = productService.update(dto, productId);
+        System.out.println(update.getName());
+        Assertions.assertEquals(dto.getName(), update.getName(), "Product name is not equal");
+
+    }
 
 }
 
