@@ -25,6 +25,8 @@ public class Order {
 
     private int orderAmount;
 
+    private String billingName;
+
     @Column(length = 1000)
     private String billingAddress;
 
