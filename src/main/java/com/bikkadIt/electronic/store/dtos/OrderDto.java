@@ -24,6 +24,8 @@ public class OrderDto {
 
     private int orderAmount;
 
+    private String billingName;
+
     private String billingAddress;
 
     private String billingPhone;
