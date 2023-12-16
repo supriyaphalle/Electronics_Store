@@ -1,0 +1,4 @@
+INDEX VERSION 1.134+C:\Users\SUPRIYA\Desktop\CLASS\Project\electronic-store\electronics_store\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+761079460.index
+174935534.index
