@@ -1,10 +1,8 @@
 package com.bikkadIt.electronic.store.controllers;
 
-import com.bikkadIt.electronic.store.dtos.ApiResponseMessage;
-import com.bikkadIt.electronic.store.dtos.CategoryDto;
-import com.bikkadIt.electronic.store.dtos.CreateOrderRequest;
-import com.bikkadIt.electronic.store.dtos.OrderDto;
+import com.bikkadIt.electronic.store.dtos.*;
 import com.bikkadIt.electronic.store.services.OrderService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +35,17 @@ public class OrderController {
     public ResponseEntity<List<OrderDto>> getOrderOfUser(@PathVariable String userId) {
         List<OrderDto> orderList = orderService.getOrderOfUser(userId);
         return new ResponseEntity<>(orderList, HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<PageableResponse<OrderDto>> getAllOrder(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "billingName", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        PageableResponse<OrderDto> orders = orderService.getOrders(pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
 }
