@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -30,8 +31,12 @@ public class OrderController {
         ApiResponseMessage message = ApiResponseMessage.builder().status(HttpStatus.OK).message("order is removed!!")
                 .success(true).build();
         return new ResponseEntity<>(message, HttpStatus.OK);
-
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderDto>> getOrderOfUser(@PathVariable String userId) {
+        List<OrderDto> orderList = orderService.getOrderOfUser(userId);
+        return new ResponseEntity<>(orderList, HttpStatus.OK);
+    }
 
 }
