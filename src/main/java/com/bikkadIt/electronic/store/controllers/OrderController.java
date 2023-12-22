@@ -18,12 +18,26 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+    /**
+     * @param orderRequest
+     * @return newly created order
+     * @author SUPRIYA
+     * @apiNote To create order in database
+     * @since V 1.0
+     */
     @PostMapping("/")
     public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
         OrderDto orderDto = orderService.createOrder(orderRequest);
         return new ResponseEntity<>(orderDto, HttpStatus.CREATED);
     }
 
+    /**
+     * @param orderId
+     * @return return api message after order removed
+     * @author SUPRIYA
+     * @apiNote To remove order
+     * @since V 1.0
+     */
     @DeleteMapping("/{orderId}")
     public ResponseEntity<ApiResponseMessage> removeOrder(@PathVariable String orderId) {
         orderService.removeOrder(orderId);
@@ -32,12 +46,25 @@ public class OrderController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    /**
+     * @param  userId
+     * @return get all order of user data
+     * @author SUPRIYA
+     * @apiNote To get order data from  database with userID
+     * @since V 1.0
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderDto>> getOrderOfUser(@PathVariable String userId) {
         List<OrderDto> orderList = orderService.getOrderOfUser(userId);
         return new ResponseEntity<>(orderList, HttpStatus.OK);
     }
 
+    /**
+     * @return get all order data
+     * @author SUPRIYA
+     * @apiNote To get order data from  database
+     * @since V 1.0
+     */
     @GetMapping("/")
     public ResponseEntity<PageableResponse<OrderDto>> getAllOrder(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
