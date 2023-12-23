@@ -138,4 +138,39 @@ public class CategoryControllerTest {
 
     }
 
+//    @Test
+//    public void postCategoryImageByID() throws Exception {
+//        String categoryId = "qazxsw";
+//        CategoryDto dto = mapper.map(category, CategoryDto.class);
+//        String imageName = "fileName";
+//        CategoryDto dto1 = mapper.map(category, CategoryDto.class);
+//        dto1.setCoverImage(imageName);
+//        MockMultipartFile file
+//                = new MockMultipartFile(
+//                "file",
+//                "hello.txt",
+//                MediaType.TEXT_PLAIN_VALUE,
+//                "Hello, World!".getBytes()
+//        );
+//
+//
+//        Mockito.when(fileService.uploadFile(Mockito.any(), Mockito.any())).thenReturn(imageName);
+//        Mockito.when(categoryService.getCategory(Mockito.anyString())).thenReturn(dto);
+//        Mockito.when(categoryService.updateCategory(Mockito.any(), Mockito.anyString())).thenReturn(dto1);
+//
+//        this.mockMvc.perform(multipart("/category/image/" + categoryId)
+//
+//                        .file(file)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+//
+//                )
+//                .andDo(print())
+//                .andExpect(status().isCreated());
+//
+//
+//    }
+
+
+
 }
