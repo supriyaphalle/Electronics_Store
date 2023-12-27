@@ -64,6 +64,7 @@ public class CartServiceTest {
         p = Product.builder().productId("ssss").name("Mobile").price(15000).stock(true).live(true)
                 .productImage("pqr.png").quantity(13).category(category).discountPrice(14000)
                 .addedDate(new Date()).description("This is Product service test").build();
+
         items.add(new CartItem(1, p, 2, 30, cart));
 
         user = User.builder()
@@ -86,9 +87,8 @@ public class CartServiceTest {
         AddItemToCartRequest request = new AddItemToCartRequest(3, p.getProductId());
 
         items.add(new CartItem(1, p, 5, 30, cart));
-        List<CartItemDto> dtos = items.stream().map(i -> mapper.map(i, CartItemDto.class)).collect(Collectors.toList());
+//        List<CartItemDto> dtos = items.stream().map(i -> mapper.map(i, CartItemDto.class)).collect(Collectors.toList());
 
-        CartDto updatedCart = CartDto.builder().cartId(cart.getCartId()).items(dtos).createdAt(new Date()).user(user).build();
         Cart cart1 = Cart.builder().cartId(cart.getCartId()).items(items).createdAt(new Date()).user(user).build();
 
         String userId = "aaaa";
@@ -133,7 +133,7 @@ public class CartServiceTest {
         CartDto cartDto = cartService.getCartByUser(userId);
         Assertions.assertNotNull(cartDto);
         Assertions.assertEquals(cartDto.getUser().getName(), "Supriya", "User name not matched");
-        Assertions.assertEquals(cartDto.getCartId(),cart.getCartId(),"Cart id not matched");
+        Assertions.assertEquals(cartDto.getCartId(), cart.getCartId(), "Cart id not matched");
 
 
     }
