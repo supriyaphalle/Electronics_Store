@@ -33,4 +33,6 @@ public class AppConstants {
     public static final String SORT_BY = "name";
 
     public static final String ORDER_NOT_FOUND = "Order not found with this id";
+
+    public static final String   ACCESS_DENIED="Access Denied !! ";
 }
